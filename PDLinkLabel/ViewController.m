@@ -55,9 +55,11 @@
     link2.range = [string rangeOfString:@"flowers."];
     link2.meta = nil;
 
-    self.linkLabel.text = string;
-    [self.linkLabel drawWithLinks:@[link, link2]];
-    [self.linkLabel invalidateIntrinsicContentSize];
+    [self.linkLabel drawText:string withLinks:@[link, link2]];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.linkLabel drawText:nil];
+    });
 }
 
 #pragma mark - PDLinkLabelDelegate

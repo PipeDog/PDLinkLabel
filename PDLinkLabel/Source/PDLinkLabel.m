@@ -82,12 +82,17 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
 }
 
 #pragma mark - Public Methods
-- (void)draw {
-    [self drawWithLinks:nil];
+- (void)drawText:(NSString *)text {
+    [self drawText:text withLinks:nil];
 }
 
-- (void)drawWithLinks:(NSArray<PDLinkLabelLink *> *)links {
-    if (!self.text.length) { return; }
+- (void)drawText:(NSString *)text withLinks:(NSArray<PDLinkLabelLink *> *)links {
+    _text = [text copy];
+    self.textView.attributedText = _attributedText = nil;
+    
+    if (!self.text.length) {
+        return;
+    }
     
     NSInteger len = self.text.length;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -218,11 +223,6 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
 - (void)setTextColor:(UIColor *)textColor {
     _textColor = textColor;
     self.textView.textColor = _textColor;
-}
-
-- (void)setText:(NSString *)text {
-    _text = [text copy];
-    self.textView.attributedText = _attributedText = nil;
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines {

@@ -16,16 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PDLinkLabel : UIView
 
 @property (nonatomic, weak, nullable) id<PDLinkLabelDelegate> delegate;
-@property (nonatomic, copy, nullable) NSString *text;
+@property (nonatomic, copy, nullable, readonly) NSString *text;
 @property (nonatomic, copy, nullable, readonly) NSAttributedString *attributedText;
+
 @property (nonatomic, assign) NSTextAlignment textAlignment;
 @property (nonatomic, strong) UIFont *font; // Default system font 12 plain
 @property (nonatomic, strong) UIColor *textColor; // Default is darkGrayColor
 @property (nonatomic, assign) CGFloat lineSpacing; // Default 3.f
 @property (nonatomic, assign) NSInteger numberOfLines; // Default 0, no limit
 
-- (void)draw; // Call `drawWithLinks:` with argument nil
-- (void)drawWithLinks:(nullable NSArray<PDLinkLabelLink *> *)links;
+- (void)drawText:(nullable NSString *)text;
+- (void)drawText:(nullable NSString *)text withLinks:(nullable NSArray<PDLinkLabelLink *> *)links;
 
 - (void)automicFitHeight; // Call this method if you need automic fit height
 - (void)invalidAutomicFitHeight;
