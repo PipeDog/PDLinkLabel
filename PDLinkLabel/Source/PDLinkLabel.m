@@ -31,6 +31,7 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
 
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, copy) NSDictionary<NSString *, PDLinkLabelLink *> *links;
+@property (nonatomic, copy) NSArray<PDLinkLabelLink *> *metaLinks;
 
 @end
 
@@ -67,6 +68,7 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
      */
     _lineBreakMode = NSLineBreakByWordWrapping;
     _numberOfLines = 0;
+    self.clipsToBounds = YES;
 }
 
 - (void)_createViewHierarchy {
@@ -88,6 +90,7 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
 
 - (void)drawText:(NSString *)text withLinks:(NSArray<PDLinkLabelLink *> *)links {
     _text = [text copy];
+    _metaLinks = [links copy];
     self.textView.attributedText = _attributedText = nil;
     
     if (!self.text.length) {
@@ -185,6 +188,12 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
     return NO;
 }
 
+- (void)_drawIfNeeded {
+    if (!self.superview) { return; }
+    
+    [self drawText:self.text withLinks:self.metaLinks];
+}
+
 #pragma mark - UITextViewDelegate
 
 #pragma clang diagnostic push
@@ -209,25 +218,34 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
     return [self.textView intrinsicContentSize];
 }
 
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    [self _drawIfNeeded];
+}
+
 #pragma mark - Setter Methods
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     _textAlignment = textAlignment;
     self.textView.textAlignment = _textAlignment;
+    [self _drawIfNeeded];
 }
 
 - (void)setFont:(UIFont *)font {
     _font = font;
     self.textView.font = _font;
+    [self _drawIfNeeded];
 }
 
 - (void)setTextColor:(UIColor *)textColor {
     _textColor = textColor;
     self.textView.textColor = _textColor;
+    [self _drawIfNeeded];
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
     _numberOfLines = numberOfLines;
     self.textView.textContainer.maximumNumberOfLines = _numberOfLines;
+    [self _drawIfNeeded];
 }
 
 #pragma mark - Getter Methods
