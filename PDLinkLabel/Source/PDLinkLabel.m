@@ -111,19 +111,19 @@ static NSString *const kInteractURLPrefix = @"act://www.pipedog.com/interact/cli
     for (PDLinkLabelLink *link in links) {
         NSString *text = link.text; // word in string
         if (!text.length) {
-            NSAssert(NO, @"The property `text` from `NEAttributedLabelItem` can not be nil!");
+            NSAssert(NO, @"The property `text` from `PDLinkLabelLink` can not be nil!");
             continue;
         }
         
         UIColor *textColor = link.textColor;
         if (!textColor) {
-            NSAssert(NO, @"The property `textColor` from `NEAttributedLabelItem` can not be nil!");
+            NSAssert(NO, @"The property `textColor` from `PDLinkLabelLink` can not be nil!");
             continue;
         }
         
         NSRange range = link.range;
         if (!range.length || (range.location + range.length > len)) { // maybe out of bounds
-            NSAssert(NO, @"The property `range` from `NEAttributedLabelItem` should be valid!");
+            NSAssert(NO, @"The property `range` from `PDLinkLabelLink` should be valid!");
             continue;
         }
         
